@@ -2,6 +2,7 @@ package com.vpp97.spring_2_testing.data;
 
 import com.vpp97.spring_2_testing.models.Account;
 import com.vpp97.spring_2_testing.models.Bank;
+import com.vpp97.spring_2_testing.models.DataTransferDto;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -29,5 +30,14 @@ public class Data {
                 .name("Banco Financiero")
                 .totalTransfers(0)
                 .build());
+    }
+
+    public static DataTransferDto createDataTransferDto() {
+        return DataTransferDto.builder()
+                .bankId(1L)
+                .sourceAccountId(1L)
+                .destinationAccountId(2L)
+                .amount(new BigDecimal("400"))
+                .build();
     }
 }

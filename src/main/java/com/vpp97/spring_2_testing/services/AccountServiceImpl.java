@@ -4,19 +4,16 @@ import com.vpp97.spring_2_testing.models.Account;
 import com.vpp97.spring_2_testing.models.Bank;
 import com.vpp97.spring_2_testing.repositories.AccountRepository;
 import com.vpp97.spring_2_testing.repositories.BankRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 @Service
+@RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService{
-    public AccountServiceImpl(AccountRepository accountRepository, BankRepository bankRepository) {
-        this.accountRepository = accountRepository;
-        this.bankRepository = bankRepository;
-    }
-
-    private  AccountRepository accountRepository;
-    private  BankRepository bankRepository;
+    private final AccountRepository accountRepository;
+    private final BankRepository bankRepository;
 
     @Override
     public Account findById(Long accountId) {

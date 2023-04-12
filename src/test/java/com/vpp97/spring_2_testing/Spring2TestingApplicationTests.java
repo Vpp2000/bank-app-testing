@@ -144,5 +144,28 @@ class Spring2TestingApplicationTests {
         verify(accountRepository).findAll();
     }
 
+    @Test
+    @DisplayName("Test account saving")
+    void test_account_save(){
+        Account accountMocked = Account.builder()
+                .ownerName("Charles")
+                .balance(new BigDecimal("2700"))
+                .build();
+
+        when(accountRepository.save(any(Account.class))).then(invocation -> {
+            Account acc = invocation.getArgument(0);
+            acc.setId(3L);
+            return acc;
+        });
+
+        Account account = accountService.save(accountMocked);
+
+        assertEquals("Charles", account.getOwnerName());
+        assertEquals(3L,account.getId());
+        assertEquals("2700", account.getBalance().toPlainString());
+
+        verify(accountRepository, times(1)).save(any(Account.class));
+    }
+
 
 }

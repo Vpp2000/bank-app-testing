@@ -18,11 +18,13 @@ public class AccountServiceImpl implements AccountService{
     private final BankRepository bankRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Account> findAll() {
         return accountRepository.findAll();
     }
 
     @Override
+    @Transactional
     public Account save(Account account) {
         return accountRepository.save(account);
     }

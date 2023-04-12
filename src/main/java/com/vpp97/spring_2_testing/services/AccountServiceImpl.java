@@ -9,12 +9,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService{
     private final AccountRepository accountRepository;
     private final BankRepository bankRepository;
+
+    @Override
+    public List<Account> findAll() {
+        return accountRepository.findAll();
+    }
+
+    @Override
+    public Account save(Account account) {
+        return accountRepository.save(account);
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -51,6 +62,7 @@ public class AccountServiceImpl implements AccountService{
         int totalTransfers = bank.getTotalTransfers();
         bank.setTotalTransfers(++totalTransfers);
         bankRepository.save(bank);
-
     }
+
+
 }

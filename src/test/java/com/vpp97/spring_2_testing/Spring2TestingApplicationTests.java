@@ -11,6 +11,8 @@ import com.vpp97.spring_2_testing.services.AccountServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -29,17 +31,15 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class Spring2TestingApplicationTests {
-
-
+    @Mock
     AccountRepository accountRepository;
+    @Mock
     BankRepository bankRepository;
-    AccountService accountService;
+    @InjectMocks
+    AccountServiceImpl accountService;
 
     @BeforeEach
     void setup_dependencies(){
-        accountRepository = Mockito.mock(AccountRepository.class);
-        bankRepository  = Mockito.mock(BankRepository.class);
-        accountService = new AccountServiceImpl(accountRepository, bankRepository);
     }
 
     @Test

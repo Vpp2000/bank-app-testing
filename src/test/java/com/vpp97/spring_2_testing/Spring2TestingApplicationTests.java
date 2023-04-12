@@ -19,8 +19,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -122,4 +125,24 @@ class Spring2TestingApplicationTests {
         verify(accountRepository, times(2)).findById(1L);
 
     }
+
+    @Test
+    @DisplayName("Test find all service")
+    void test_find_all_service() {
+        List<Account> accountsMocked = Arrays.asList(
+                Data.createAccount001().orElseThrow(),
+                Data.createAccount002().orElseThrow()
+        );
+
+        when(accountRepository.findAll()).thenReturn(accountsMocked);
+
+        List<Account> accounts = accountService.findAll();
+
+        assertFalse(accounts.isEmpty());
+        assertEquals(2, accounts.size());
+
+        verify(accountRepository).findAll();
+    }
+
+
 }

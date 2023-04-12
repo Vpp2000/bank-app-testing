@@ -71,10 +71,10 @@ class Spring2TestingApplicationTests {
 
         verify(accountRepository, times(3)).findById(1L);
         verify(accountRepository, times(3)).findById(2L);
-        verify(accountRepository, times(2)).update(any(Account.class));
+        verify(accountRepository, times(2)).save(any(Account.class));
 
         verify(bankRepository, times(2)).findById(1L);
-        verify(bankRepository).update(any(Bank.class));
+        verify(bankRepository).save(any(Bank.class));
 
         verify(accountRepository, times(6)).findById(anyLong());
         verify(accountRepository, never()).findAll();
@@ -101,18 +101,18 @@ class Spring2TestingApplicationTests {
 
         assertEquals("Not enough money on this account", message);
 
-        verify(bankRepository, never()).update(any(Bank.class));
+        verify(bankRepository, never()).save(any(Bank.class));
         verify(bankRepository, never()).findById(1L);
 
-        verify(accountRepository, never()).update(any(Account.class));
+        verify(accountRepository, never()).save(any(Account.class));
     }
 
     @Test
     @DisplayName("Test to use assert Same")
     void test_with_assert_same() {
         when(accountRepository.findById(1L)).thenReturn(Data.createAccount001());
-        Account c1 = accountRepository.findById(1L);
-        Account c2 = accountRepository.findById(1L);
+        Account c1 = accountService.findById(1L);
+        Account c2 = accountService.findById(1L);
 
         assertSame(c1, c2);
         assertTrue(c1 == c2);

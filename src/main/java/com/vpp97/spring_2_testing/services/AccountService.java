@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
-@Service
 public interface AccountService {
     Account findById(Long accountId);
     int checkTotalTransfers(Long bankId);

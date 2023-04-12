@@ -14,7 +14,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
 
@@ -31,11 +33,11 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class Spring2TestingApplicationTests {
-    @Mock
+    @MockBean
     AccountRepository accountRepository;
-    @Mock
+    @MockBean
     BankRepository bankRepository;
-    @InjectMocks
+    @Autowired
     AccountServiceImpl accountService;
 
     @BeforeEach

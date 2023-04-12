@@ -17,7 +17,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
@@ -100,5 +102,21 @@ class Spring2TestingApplicationTests {
         verify(bankRepository, never()).findById(1L);
 
         verify(accountRepository, never()).update(any(Account.class));
+    }
+
+    @Test
+    @DisplayName("Test to use assert Same")
+    void test_with_assert_same() {
+        when(accountRepository.findById(1L)).thenReturn(Data.createAccount001());
+        Account c1 = accountRepository.findById(1L);
+        Account c2 = accountRepository.findById(1L);
+
+        assertSame(c1, c2);
+        assertTrue(c1 == c2);
+        assertEquals("Victor", c1.getOwnerName());
+        assertEquals("Victor", c2.getOwnerName());
+
+        verify(accountRepository, times(2)).findById(1L);
+
     }
 }

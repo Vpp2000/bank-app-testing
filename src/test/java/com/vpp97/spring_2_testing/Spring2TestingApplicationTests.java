@@ -38,7 +38,8 @@ class Spring2TestingApplicationTests {
     @MockBean
     BankRepository bankRepository;
     @Autowired
-    AccountServiceImpl accountService;
+    AccountService accountService;
+    //    AccountServiceImpl accountService;
 
     @BeforeEach
     void setup_dependencies(){

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -106,6 +107,33 @@ class AccountControllerRestTemplateTest {
         Account accountResponse = response.getBody();
         assertEquals(4L, accountResponse.getId());
         assertEquals("Ander",accountResponse.getOwnerName());
+    }
+
+    @Test
+    @Order(5)
+    void test_delete_account() {
+        ResponseEntity<Account[]> response = client.getForEntity("/api/accounts", Account[].class);
+        List<Account> accounts = new ArrayList<>();
+        Collections.addAll(accounts, response.getBody());
+        assertEquals(4, accounts.size());
+
+        //client.delete("/api/accounts/1");
+        //ResponseEntity<Void> exchange = client.exchange("/api/accounts/1", HttpMethod.DELETE, null, Void.class);
+        Map<String, String> pathVars = new HashMap<>();
+        pathVars.put("id", "1");
+        ResponseEntity<Void> exchange = client.exchange("/api/accounts/{id}", HttpMethod.DELETE, null, Void.class, pathVars);
+
+        assertEquals(HttpStatus.NO_CONTENT, exchange.getStatusCode());
+        assertFalse(exchange.hasBody());
+
+        ResponseEntity<Account[]> response2 = client.getForEntity("/api/accounts", Account[].class);
+        accounts = new ArrayList<>();
+        Collections.addAll(accounts, response2.getBody());
+        assertEquals(3, accounts.size());
+
+        ResponseEntity<Account> responseFinding = client.getForEntity("/api/accounts/1", Account.class);
+        assertEquals(HttpStatus.NOT_FOUND, responseFinding.getStatusCode());
+        assertFalse(responseFinding.hasBody());
     }
 
 }

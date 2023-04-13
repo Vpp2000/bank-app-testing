@@ -6,6 +6,7 @@ import com.vpp97.spring_2_testing.services.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,6 +57,12 @@ public class AccountController {
     @ResponseStatus(HttpStatus.CREATED)
     public Account save(@RequestBody Account account){
         return accountService.save(account);
+    }
+
+    @DeleteMapping("{accountId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable("accountId") Long accountId){
+        accountService.deleteByID(accountId);
     }
 
 }

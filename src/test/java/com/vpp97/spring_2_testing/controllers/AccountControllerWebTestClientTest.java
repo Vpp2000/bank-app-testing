@@ -184,4 +184,32 @@ class AccountControllerWebTestClientTest {
                 });
     }
 
+    @Test
+    @Order(7)
+    void test_delete_account(){
+        webTestClient.get()
+                .uri("/api/accounts")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(Account.class).hasSize(5);
+
+        webTestClient.delete()
+                        .uri("/api/accounts/5")
+                        .exchange()
+                        .expectStatus().isNoContent()
+                        .expectBody().isEmpty();
+
+        webTestClient.get()
+                .uri("/api/accounts")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(Account.class).hasSize(4);
+
+        webTestClient.delete()
+                .uri("/api/accounts/5")
+                .exchange()
+                .expectStatus().is5xxServerError();
+
+    }
+
 }

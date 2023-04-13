@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +33,7 @@ public class AccountServiceImpl implements AccountService{
     @Override
     @Transactional(readOnly = true)
     public Account findById(Long accountId) {
-        return accountRepository.findById(accountId).orElseThrow();
+        return accountRepository.findById(accountId).orElseThrow(() -> new NoSuchElementException(String.format("Account with id %s not found", accountId)));
     }
 
     @Override

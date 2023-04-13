@@ -205,11 +205,12 @@ class AccountControllerWebTestClientTest {
                 .expectStatus().isOk()
                 .expectBodyList(Account.class).hasSize(4);
 
-        webTestClient.delete()
+        webTestClient.get()
                 .uri("/api/accounts/5")
                 .exchange()
-                .expectStatus().is5xxServerError();
-
+                //.expectStatus().is5xxServerError();
+                .expectStatus().isNotFound()
+                .expectBody().isEmpty();
     }
 
 }

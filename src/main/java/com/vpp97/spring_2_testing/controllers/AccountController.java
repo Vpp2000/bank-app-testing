@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("api/accounts")
@@ -27,9 +28,13 @@ public class AccountController {
     private final AccountService accountService;
 
     @GetMapping("{accountId}")
-    @ResponseStatus(HttpStatus.OK)
-    public Account findById(@PathVariable("accountId") Long accountId){
-        return accountService.findById(accountId);
+    public ResponseEntity<Account> findById(@PathVariable("accountId") Long accountId){
+        try {
+            Account account = accountService.findById(accountId);
+            return ResponseEntity.ok(account);
+        } catch (NoSuchElementException exception){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping("transfer")

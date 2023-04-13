@@ -18,10 +18,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.Matchers.is;
 
@@ -93,6 +96,91 @@ class AccountControllerWebTestClientTest {
                     Account account = res.getResponseBody();
                     assertEquals("Victor", account.getOwnerName());
                     assertEquals("990.00", account.getBalance().toPlainString());
+                });
+    }
+
+    @Test
+    @Order(3)
+    void test_find_all_accounts(){
+        webTestClient.get().uri("/api/accounts")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .jsonPath("$").isArray()
+                .jsonPath("$[0].ownerName").isEqualTo("Victor")
+                .jsonPath("$[0].id").isEqualTo(1)
+                .jsonPath("$").value(hasSize(3));
+    }
+
+    @Test
+    @Order(4)
+    void test_find_all_accounts_another_way(){
+        webTestClient.get().uri("/api/accounts")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBodyList(Account.class)
+                .consumeWith(res -> {
+                    List<Account> accounts = res.getResponseBody();
+                    assertEquals(3, accounts.size());
+                    assertEquals("Victor", accounts.get(0).getOwnerName());
+                    assertEquals(990, accounts.get(0).getBalance().intValue());
+                })
+                .hasSize(3);
+    }
+
+    @Test
+    @Order(5)
+    void test_save_account(){
+        // given
+        Account acount = Account.builder()
+                .ownerName("Karim")
+                .balance(new BigDecimal("1600"))
+                .build();
+
+        // when
+        webTestClient.post()
+                .uri("/api/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(acount)
+                .exchange()
+
+        // then
+                .expectStatus().isCreated()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .jsonPath("$.id").isEqualTo(4)
+                .jsonPath("$.ownerName").value(is("Karim"))
+                .jsonPath("$.ownerName").isEqualTo("Karim");
+    }
+
+
+    @Test
+    @Order(6)
+    void test_save_account_with_consumer(){
+        // given
+        Account account = Account.builder()
+                .ownerName("Sandro")
+                .balance(new BigDecimal("1600"))
+                .build();
+
+        // when
+        webTestClient.post()
+                .uri("/api/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(account)
+                .exchange()
+
+                // then
+                .expectStatus().isCreated()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(Account.class)
+                .consumeWith(res -> {
+                    Account acc = res.getResponseBody();
+                    assertNotNull(acc);
+                    assertEquals(5L, acc.getId());
+                    assertEquals("Sandro", acc.getOwnerName());
                 });
     }
 

@@ -3,6 +3,7 @@ package com.vpp97.spring_2_testing;
 import com.vpp97.spring_2_testing.models.Account;
 import com.vpp97.spring_2_testing.repositories.AccountRepository;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
+@Tag("integration_jpa")
 public class IntegrationJpaTest {
     @Autowired
     AccountRepository accountRepository;

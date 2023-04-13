@@ -53,8 +53,10 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public void transfer(Long bankId, Long sourceAccountId, Long destinationAccountId, BigDecimal amount) {
         Account sourceAccount = accountRepository.findById(sourceAccountId).orElseThrow();
+        System.out.println(sourceAccount);
         sourceAccount.debit(amount);
         accountRepository.save(sourceAccount);
+        System.out.println(sourceAccount);
 
         Account destinationAccount = accountRepository.findById(destinationAccountId).orElseThrow();
         destinationAccount.credit(amount);

@@ -37,7 +37,7 @@ public class Data {
                 .bankId(1L)
                 .sourceAccountId(1L)
                 .destinationAccountId(2L)
-                .amount(new BigDecimal("400"))
+                .amount(new BigDecimal("10"))
                 .build();
     }
 }
